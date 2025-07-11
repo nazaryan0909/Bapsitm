@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hy">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -52,7 +52,7 @@
       font-size: 1.2rem;
       margin: 0.5rem 0;
     }
-    .btn {
+    .btn, .lang-btn {
       display: inline-block;
       margin-top: 1rem;
       padding: 0.6rem 1.2rem;
@@ -65,8 +65,9 @@
       text-decoration: none;
       font-size: 1.2rem;
       transition: background 0.3s;
+      cursor: pointer;
     }
-    .btn:hover {
+    .btn:hover, .lang-btn:hover {
       background-color: #e0c7aa;
     }
     .angel {
@@ -100,32 +101,72 @@
 </head>
 <body>
   <header>
+    <button class="lang-btn" id="langToggle" onclick="toggleLanguage()">Փոխել լեզուն</button>
     <img src="./images/Angel-1.svg" alt="Angel" class="angel left">
     <img src="./images/Angel-2.svg" alt="Angel" class="angel right">
-    <h1>You're invited to a very special event</h1>
-    <p class="invitation italian-text">We joyfully invite you to celebrate the holy baptism of our sweet Monte, Milla & Michael. Your presence means the world to us, and we can't wait to share this magical day of love, laughter, and blessings with you</p>
+    <h1 id="heading" class="italian-text"></h1>
+    <p id="invitation" class="invitation italian-text">Սիրով հրավիրում ենք ձեզ մեր հրեշտակների, Մոնթեի, Միլլայի և Միքայելի  սուրբ մկրտությունը նշելու։ Ձեր ներկայությունը մեզ համար անչափ կարևոր է, և մենք անհամբեր սպասում ենք այս հրաշալի օրը կիսելուն ձեզ հետ։</p>
     <div class="countdown" id="countdown"></div>
   </header>
 
   <section>
     <div class="box">
       <img src="./images/church.png" alt="Cross" class="cross">
-      <h2 class="italian-text">Church Ceremony at St. Leon Chuch, Burbank, CA at 4:00 o'clock</h2>
-      <a class="btn" href="https://maps.app.goo.gl/DQ5sSkUeYBt1gt6g9?g_st=ipc" target="_blank">How to get to the Church</a>
+      <h2 id="church-title" class="italian-text">Սուրբ Լեոնի եկեղեցում՝ Բուրբենք քաղաքում, ժամը 4:00-ին</h2>
+      <a id="church-btn" class="btn" href="https://maps.app.goo.gl/DQ5sSkUeYBt1gt6g9?g_st=ipc" target="_blank">Ինչպես հասնել եկեղեցի</a>
     </div>
     <div class="box">
       <img src="./images/icons8-glasses-100.png" alt="Cross" class="cross">
-      <h2 class="italian-text">Reseption to Golden Palace Rental Hall at 6:00 o'clock</h2>
+      <h2 id="reception-title" class="italian-text">Հանդիսություն՝ Golden Palace Rental Hall-ում, ժամը 6:00-ին</h2>
       <p class="location">7818 Foothill Blvd, Sunland, CA 91040</p>
-      <a class="btn" href="https://maps.app.goo.gl/X7ViTAmcM8mrxA9C6?g_st=ipc" target="_blank">How to get to the Restaurant</a>
+      <a id="restaurant-btn" class="btn" href="https://maps.app.goo.gl/X7ViTAmcM8mrxA9C6?g_st=ipc" target="_blank">Ինչպես հասնել ռեստորան</a>
     </div>
   </section>
 
   <footer>
-    <p>We are so excited to share this joyful moment with you. August 2nd — Save the date!</p>
+    <p id="footer">Մենք շատ ուրախ ենք կիսվելու այս ուրախ պահը ձեզ հետ։ Օգոստոսի 2 — Նշեք ամսաթիվը։</p>
   </footer>
 
   <script>
+    const translations = {
+      hy: {
+        invitation: "Սիրով հրավիրում ենք ձեզ մեր հրեշտակների, Մոնթեի, Միլլայի և Միքայելի  սուրբ մկրտությունը նշելու։ Ձեր ներկայությունը մեզ համար անչափ կարևոր է, և մենք անհամբեր սպասում ենք այս հրաշալի օրը կիսելուն ձեզ հետ։",
+        churchTitle: "St. Leon եկեղեցում՝ Burbank քաղաքում, ժամը 4:00-ին",
+        churchBtn: "Ինչպես հասնել եկեղեցի",
+        receptionTitle: "Հանդիսություն՝ Golden Palace Rental Hall-ում, ժամը 6:00-ին",
+        restaurantBtn: "Ինչպես հասնել ռեստորան",
+        footer: "Մենք անհամբեր սպասում ենք կիսելու այդ պահը ձեզ հետ։ Օգոստոսի 2 ին։",
+        countdown: (d, h, m, s) => `${d} օր ${h} ժամ ${m} րոպե ${s} վայրկյան մինչ մկրտությանը`
+      },
+      en: {
+        heading: "You're invited to a very special event",
+        invitation: "We joyfully invite you to celebrate the holy baptism of our sweet Monte, Milla & Michael. Your presence means the world to us, and we can't wait to share this magical day of love, laughter, and blessings with you",
+        churchTitle: "Church Ceremony at St. Leon Church, Burbank, CA at 4:00 o'clock",
+        churchBtn: "How to get to the Church",
+        receptionTitle: "Reception to Golden Palace Rental Hall at 6:00 o'clock",
+        restaurantBtn: "How to get to the Restaurant",
+        footer: "We are so excited to share this joyful moment with you. August 2nd — Save the date!",
+        countdown: (d, h, m, s) => `${d}d ${h}h ${m}m ${s}s until the ceremony`
+      }
+    };
+
+    let currentLang = 'hy';
+
+    function toggleLanguage() {
+      currentLang = currentLang === 'hy' ? 'en' : 'hy';
+      const t = translations[currentLang];
+      document.documentElement.lang = currentLang;
+      document.getElementById('langToggle').textContent = currentLang === 'hy' ? 'Փոխել լեզուն' : 'Switch Language';
+      document.getElementById('heading').textContent = t.heading;
+      document.getElementById('invitation').textContent = t.invitation;
+      document.getElementById('church-title').textContent = t.churchTitle;
+      document.getElementById('church-btn').textContent = t.churchBtn;
+      document.getElementById('reception-title').textContent = t.receptionTitle;
+      document.getElementById('restaurant-btn').textContent = t.restaurantBtn;
+      document.getElementById('footer').textContent = t.footer;
+      updateCountdown();
+    }
+
     const countdown = document.getElementById("countdown");
     const eventDate = new Date("August 2, 2025 16:00:00").getTime();
 
@@ -134,7 +175,7 @@
       const distance = eventDate - now;
 
       if (distance < 0) {
-        countdown.innerHTML = "The baptism day has arrived!";
+        countdown.innerHTML = currentLang === 'hy' ? "Մկրտության օրը եկել է։" : "The baptism day has arrived!";
         return;
       }
 
@@ -143,7 +184,7 @@
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      countdown.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s until the ceremony`;
+      countdown.innerHTML = translations[currentLang].countdown(days, hours, minutes, seconds);
     }
 
     updateCountdown();
